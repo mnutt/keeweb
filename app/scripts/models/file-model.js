@@ -302,6 +302,7 @@ var FileModel = Backbone.Model.extend({
     setModified: function() {
         if (!this.get('demo')) {
             this.set({ modified: true, dirty: true });
+            this.trigger('sync', this);
         }
     },
 

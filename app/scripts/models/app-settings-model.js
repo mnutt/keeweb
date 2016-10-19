@@ -24,7 +24,7 @@ var AppSettingsModel = Backbone.Model.extend({
         helpTipCopyShown: false,
         skipOpenLocalWarn: false,
         hideEmptyFields: false,
-        skipHttpsWarning: false,
+        skipHttpsWarning: true,
         demoOpened: false,
         fontSize: 0,
         tableViewColumns: null,
@@ -45,10 +45,11 @@ var AppSettingsModel = Backbone.Model.extend({
     },
 
     load: function() {
-        var data = SettingsStore.load('app-settings');
-        if (data) {
-            this.set(data, {silent: true});
-        }
+        SettingsStore.load('app-settings', (data) => {
+            if (data) {
+                this.set(data, {silent: true});
+            }
+        });
     },
 
     save: function() {

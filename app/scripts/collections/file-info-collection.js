@@ -10,11 +10,15 @@ var FileInfoCollection = Backbone.Collection.extend({
     initialize: function () {
     },
 
-    load: function () {
-        var data = SettingsStore.load('file-info');
-        if (data) {
-            this.reset(data, {silent: true});
-        }
+    load: function (cb) {
+        SettingsStore.load('file-info', (data) => {
+            if (data) {
+                this.reset(data, {silent: true});
+            }
+            if (cb) {
+                cb();
+            }
+        });
     },
 
     save: function () {
@@ -38,9 +42,9 @@ var FileInfoCollection = Backbone.Collection.extend({
     }
 });
 
-FileInfoCollection.load = function() {
+FileInfoCollection.load = function(cb) {
     var coll = new FileInfoCollection();
-    coll.load();
+    coll.load(cb);
     return coll;
 };
 

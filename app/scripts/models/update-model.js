@@ -21,17 +21,18 @@ var UpdateModel = Backbone.Model.extend({
     },
 
     load: function() {
-        var data = SettingsStore.load('update-info');
-        if (data) {
-            try {
-                _.each(data, (val, key) => {
-                    if (/Date$/.test(key)) {
-                        data[key] = val ? new Date(val) : null;
-                    }
-                });
-                this.set(data, { silent: true });
-            } catch (e) { /* failed to load model */ }
-        }
+        SettingsStore.load('update-info', (data) => {
+            if (data) {
+                try {
+                    _.each(data, (val, key) => {
+                        if (/Date$/.test(key)) {
+                            data[key] = val ? new Date(val) : null;
+                        }
+                    });
+                    this.set(data, { silent: true });
+                } catch (e) { /* failed to load model */ }
+            }
+        });
     },
 
     save: function() {
@@ -46,6 +47,6 @@ var UpdateModel = Backbone.Model.extend({
 });
 
 UpdateModel.instance = new UpdateModel();
-UpdateModel.instance.load();
+// UpdateModel.instance.load();
 
 module.exports = UpdateModel;

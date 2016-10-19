@@ -11,10 +11,11 @@ var RuntimeDataModel = Backbone.Model.extend({
     },
 
     load: function() {
-        var data = SettingsStore.load('runtime-data');
-        if (data) {
-            this.set(data, {silent: true});
-        }
+        SettingsStore.load('runtime-data', (data) => {
+            if (data) {
+                this.set(data, {silent: true});
+            }
+        });
     },
 
     save: function() {
@@ -23,6 +24,6 @@ var RuntimeDataModel = Backbone.Model.extend({
 });
 
 RuntimeDataModel.instance = new RuntimeDataModel();
-RuntimeDataModel.instance.load();
+// RuntimeDataModel.instance.load();
 
 module.exports = RuntimeDataModel;

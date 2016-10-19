@@ -8,7 +8,14 @@
     "type": "git",
     "url": "https://github.com/keeweb/keeweb"
   },
-  "dependencies": {},
+  "dependencies": {
+    "async": "1.4.2",
+    "asyncjs": "git://github.com/mnutt/async.js.git#28ddb08",
+    "compression": "^1.6.2",
+    "express": "^4.13.1",
+    "jsDAV": "git://github.com/mnutt/jsDAV.git#e28bac7",
+    "morgan": "^1.6.1"
+  },
   "devDependencies": {
     "babel-core": "6.13.2",
     "babel-loader": "6.2.5",

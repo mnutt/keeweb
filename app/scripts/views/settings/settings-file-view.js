@@ -30,7 +30,6 @@ var SettingsFileView = Backbone.View.extend({
         'click #settings__file-file-select-link': 'triggerSelectFile',
         'change #settings__file-file-select': 'fileSelected',
         'focus #settings__file-master-pass': 'focusMasterPass',
-        'input #settings__file-master-pass': 'changeMasterPass',
         'blur #settings__file-master-pass': 'blurMasterPass',
         'input #settings__file-name': 'changeName',
         'input #settings__file-def-user': 'changeDefUser',
@@ -352,6 +351,11 @@ var SettingsFileView = Backbone.View.extend({
             this.model.resetPassword();
             e.target.value = PasswordGenerator.present(this.model.get('passwordLength'));
             this.$el.find('.settings__file-master-pass-warning').hide();
+        } else {
+            this.model.setPassword(kdbxweb.ProtectedValue.fromString(e.target.value));
+            if (!this.model.get('created')) {
+                this.$el.find('.settings__file-master-pass-warning').show();
+            }
         }
         e.target.setAttribute('type', 'password');
     },

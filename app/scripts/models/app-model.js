@@ -27,7 +27,6 @@ var AppModel = Backbone.Model.extend({
     initialize: function() {
         this.tags = [];
         this.files = new FileCollection();
-        this.fileInfos = FileInfoCollection.load();
         this.menu = new MenuModel();
         this.filter = {};
         this.sort = 'title';
@@ -43,6 +42,17 @@ var AppModel = Backbone.Model.extend({
         this.listenTo(Backbone, 'select-entry', this.selectEntry);
 
         this.appLogger = new Logger('app');
+
+        this.listenTo(this.files, 'add', this.listenForFile);
+    },
+
+    loadFileInfos: function(cb) {
+        this.fileInfos = FileInfoCollection.load(cb);
+    },
+
+    listenForFile: function(file) {
+        this.appLogger.info('listen!');
+        this.listenTo(file, 'sync', this.syncFile);
     },
 
     prepare: function() {
@@ -566,6 +576,7 @@ var AppModel = Backbone.Model.extend({
     },
 
     syncFile: function(file, options, callback) {
+        this.appLogger.info('syncing file!');
         if (file.get('demo')) {
             return callback && callback();
         }
@@ -759,14 +770,14 @@ var AppModel = Backbone.Model.extend({
                     }
                 } else if (stat.rev === fileInfo.get('rev')) {
                     if (file.get('modified')) {
-                        logger.info('Stat found same version, modified, saving');
+                        logger.info('Stat found same version, modified, saving', stat.rev);
                         saveToCacheAndStorage();
                     } else {
-                        logger.info('Stat found same version, not modified');
+                        logger.info('Stat found same version, not modified', stat.rev);
                         complete();
                     }
                 } else {
-                    logger.info('Found new version, loading from storage');
+                    logger.info('Found new version, loading from storage', stat.rev);
                     loadFromStorageAndMerge();
                 }
             });

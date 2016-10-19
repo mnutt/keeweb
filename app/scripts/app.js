@@ -32,7 +32,9 @@ $(() => {
             }
         });
     } else {
-        showApp();
+        appModel.loadFileInfos(() => {
+            showApp();
+        });
     }
 
     function isPopup() {
