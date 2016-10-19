@@ -77,11 +77,13 @@ var AppView = Backbone.View.extend({
         this.listenTo(Backbone, 'user-idle', this.userIdle);
         this.listenTo(Backbone, 'app-minimized', this.appMinimized);
         this.listenTo(Backbone, 'show-context-menu', this.showContextMenu);
+        this.listenTo(Backbone, 'second-instance', this.showSingleInstanceAlert);
 
         this.listenTo(UpdateModel.instance, 'change:updateReady', this.updateApp);
 
         window.onbeforeunload = this.beforeUnload.bind(this);
         window.onresize = this.windowResize.bind(this);
+        window.onblur = this.windowBlur.bind(this);
 
         KeyHandler.onKey(Keys.DOM_VK_ESCAPE, this.escPressed, this);
         KeyHandler.onKey(Keys.DOM_VK_BACK_SPACE, this.backspacePressed, this);
@@ -331,6 +333,12 @@ var AppView = Backbone.View.extend({
 
     windowResize: function() {
         Backbone.trigger('page-geometry', { source: 'window' });
+    },
+
+    windowBlur: function(e) {
+        if (e.target === window) {
+            Backbone.trigger('page-blur');
+        }
     },
 
     escPressed: function() {
@@ -608,6 +616,14 @@ var AppView = Backbone.View.extend({
     contextMenuSelect: function(e) {
         this.hideContextMenu();
         Backbone.trigger('context-menu-select', e);
+    },
+
+    showSingleInstanceAlert: function() {
+        this.hideOpenFile();
+        Alerts.error({
+            header: Locale.appTabWarn, body: Locale.appTabWarnBody,
+            esc: false, enter: false, click: false, buttons: []
+        });
     },
 
     dragover: function(e) {

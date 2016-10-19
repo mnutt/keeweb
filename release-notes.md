@@ -1,5 +1,9 @@
 Release notes
 -------------
+##### v1.4.0 (WIP)
+`+` password generator usability improvements  
+`+` warning about several tabs  
+
 ##### v1.3.3 (2016-09-20)
 `+` translations: fr, pl, pt  
 `-` fix #368: desktop file save error  
