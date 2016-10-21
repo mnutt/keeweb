@@ -334,27 +334,30 @@ var SettingsFileView = Backbone.View.extend({
         e.target.setAttribute('type', 'text');
     },
 
-    changeMasterPass: function(e) {
-        if (!e.target.value) {
-            this.model.resetPassword();
-            this.$el.find('.settings__file-master-pass-warning').hide();
-        } else {
-            this.model.setPassword(kdbxweb.ProtectedValue.fromString(e.target.value));
-            if (!this.model.get('created')) {
-                this.$el.find('.settings__file-master-pass-warning').show();
-            }
-        }
-    },
-
     blurMasterPass: function(e) {
         if (!e.target.value) {
             this.model.resetPassword();
             e.target.value = PasswordGenerator.present(this.model.get('passwordLength'));
             this.$el.find('.settings__file-master-pass-warning').hide();
         } else {
-            this.model.setPassword(kdbxweb.ProtectedValue.fromString(e.target.value));
-            if (!this.model.get('created')) {
-                this.$el.find('.settings__file-master-pass-warning').show();
+            var showPrompt = window.prompt;
+            var confirmation = showPrompt('Re-enter password to confirm');
+            if (e.target.value === confirmation) {
+                this.model.setPassword(kdbxweb.ProtectedValue.fromString(e.target.value));
+                if (!this.model.get('created')) {
+                    this.$el.find('.settings__file-master-pass-warning').show();
+                }
+            } else {
+                Alerts.alert({
+                    header: 'Passwords did not match',
+                    body: '',
+                    icon: 'exclamation-triangle',
+                    buttons: [Alerts.buttons.ok],
+                    esc: '',
+                    click: '',
+                    enter: ''
+                });
+                e.target.value = PasswordGenerator.present(this.model.get('passwordLength'));
             }
         }
         e.target.setAttribute('type', 'password');
