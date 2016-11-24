@@ -11,6 +11,7 @@ var Backbone = require('backbone'),
     TagView = require('../views/tag-view'),
     GeneratorPresetsView = require('../views/generator-presets-view'),
     OpenView = require('../views/open-view'),
+    CreateView = require('../views/create-view'),
     SettingsView = require('../views/settings/settings-view'),
     KeyChangeView = require('../views/key-change-view'),
     DropdownView = require('../views/dropdown-view'),
@@ -104,7 +105,12 @@ var AppView = Backbone.View.extend({
         this.views.list.setElement(this.$el.find('.app__list')).render();
         this.views.listDrag.setElement(this.$el.find('.app__list-drag')).render();
         this.views.details.setElement(this.$el.find('.app__details')).render();
-        this.showLastOpenFile();
+
+        if (this.model.settings.get('firstRun')) {
+            this.showCreateDb();
+        } else {
+            this.showLastOpenFile();
+        }
         return this;
     },
 
@@ -122,6 +128,24 @@ var AppView = Backbone.View.extend({
         this.hideOpenFile();
         this.hideKeyChange();
         this.views.open = new OpenView({ model: this.model });
+        this.views.open.setElement(this.$el.find('.app__body')).render();
+        this.views.open.on('close', this.showEntries, this);
+    },
+
+    showCreateDb: function () {
+        this.hideContextMenu();
+        this.views.menu.hide();
+        this.views.menuDrag.hide();
+        this.views.listWrap.hide();
+        this.views.list.hide();
+        this.views.listDrag.hide();
+        this.views.details.hide();
+        this.views.footer.toggle(this.model.files.hasOpenFiles());
+        this.hidePanelView();
+        this.hideSettings();
+        this.hideOpenFile();
+        this.hideKeyChange();
+        this.views.open = new CreateView({ model: this.model });
         this.views.open.setElement(this.$el.find('.app__body')).render();
         this.views.open.on('close', this.showEntries, this);
     },

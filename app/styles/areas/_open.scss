@@ -43,7 +43,7 @@
     }
   }
 
-  &__pass {
+  &__pass, &__setpass, &__setpassconfirm {
     &-area {
       @include display(flex);
       @include align-items(stretch);
@@ -120,7 +120,7 @@
     }
   }
 
-  input[type=password].open__pass-input {
+  input[type=password].open__pass-input, input[type=password].open__setpass-input, input[type=password].open__setpassconfirm-input {
     font-size: $large-pass-font-size;
     margin-bottom: 0;
     &[readonly] { cursor: pointer; }

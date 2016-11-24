@@ -159,10 +159,10 @@ var StorageWebDav = StorageBase.extend({
                 if (callback) { callback(err, xhr); callback = null; }
                 return;
             }
-            var rev = xhr.getResponseHeader('Last-Modified');
+            var rev = xhr.getResponseHeader('ETag');
             if (!rev && !config.nostat) {
                 that.logger.debug(config.op + ' error', config.path, 'no headers', that.logger.ts(ts));
-                if (callback) { callback('No Last-Modified header', xhr); callback = null; }
+                if (callback) { callback('No ETag header', xhr); callback = null; }
                 return;
             }
             var completedOpName = config.op + (config.op.charAt(config.op.length - 1) === 'e' ? 'd' : 'ed');

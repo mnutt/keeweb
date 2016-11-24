@@ -147,6 +147,8 @@
   "openXml": "Import XML",
   "openCaps": "Caps Lock is on",
   "openClickToOpen": "Click to open a file",
+  "openSetPassword": "Set master password",
+  "openSetPasswordConfirm": "Confirm master password",
   "openKeyFile": "key file",
   "openKeyFileDropbox": "(from dropbox)",
   "openDropHere": "drop files here",
