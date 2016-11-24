@@ -435,7 +435,8 @@ var AppModel = Backbone.Model.extend({
     },
 
     openFileFromCache: function(params, callback, fileInfo) {
-        Storage.cache.load(fileInfo.id, null, (err, data) => {
+        var storage = Storage[params.storage];
+        storage.load(params.path, params, (err, data, stat) => {
             new Logger('open', params.name).info('Loaded file from cache', err);
             if (err) {
                 callback(err);
